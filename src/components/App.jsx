@@ -7,10 +7,12 @@ class App extends React.Component {
     this.state = {
       page1: true,
       page2: false,
-      page3: false
+      page3: false,
+      name: ''
     };
 
     this.onClick = this.onClick.bind(this);
+    this.updateName = this.updateName.bind(this);
   }
 
   onClick(e) {
@@ -22,19 +24,27 @@ class App extends React.Component {
     });
   }
 
+  updateName(e) {
+      e.preventDefault();
+      this.setState({
+        name: e.target.value
+      });
+  }
+
   render() {
     return (
       <div className='container'>
         <div className="row">
           {
             this.state.page1 ?
-              <Page1 />
+              <Page1 updateName={ this.updateName } userName={ this.state.name }/>
             : (this.state.page2 ?
-                <Page2 />
-              : <Page3 />
+                <Page2 userName={ this.state.name }/>
+              : <Page3 userName={ this.state.name }/>
               )
           }
           <Buttons onClick={ this.onClick }/>
+          <h1>Name: { this.state.name }</h1>
         </div>
       </div>
       )
@@ -63,22 +73,34 @@ const Buttons = (props) => {
   )
 }
 
-const Page1 = (props) => {
-  return (
-    <h1>You're on page 1!</h1>
-  )
+class Page1 extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>You're on page 1 { this.props.userName }!</h1>
+        <input
+          type='text'
+          onChange={ this.props.updateName }
+        />
+      </div>
+    )
+  }
 }
 
-const Page2 = (props) => {
-  return (
-    <h1>You're on page 2!</h1>
-  )
+class Page2 extends React.Component {
+  render() {
+    return (
+      <h1>You're on page 2 { this.props.userName }!</h1>
+    )
+  }
 }
 
-const Page3 = (props) => {
-  return (
-    <h1>You're on page 3!</h1>
-  )
+class Page3 extends React.Component {
+  render() {
+    return (
+      <h1>You're on page 3 { this.props.userName }!</h1>
+    )
+  }
 }
 
 export default App;
